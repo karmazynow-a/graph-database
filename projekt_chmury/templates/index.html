@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Wyszukiwarka najkrótszych połączeń między przystankami</h2>
+<p>Oto dostępne przystanki:</p>
+
+<ul class="list-group">
+        {% for row in przystanki %}
+        <li class="list-group-item-style list-group-item ">{{ row[0]['data']['nazwa'] }}</li>
+        {% endfor %}
+      </ul>
+
+{% endblock %}

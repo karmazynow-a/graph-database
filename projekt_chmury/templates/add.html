@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>Dodaj przystanek</h2>
+    <form action="{{ url_for('add') }}" method="post">
+        <dl>
+            <dt>nazwa:</dt>
+            <dd><input type="text" name="nazwa"></dd>
+            <dt>ulica:</dt>
+            <dd><input type="text" name="ulica"></dd>
+            <dt>numer:</dt>
+            <dd><input type="number" name="numer"></dd>
+        </dl>
+        <input type="submit" value="Dodaj" class="btn btn-outline-secondary btn-style">
+    </form>
+{% endblock %}

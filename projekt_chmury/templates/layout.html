@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Połączenia MPK</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class=page>
+
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/search">Wyszukaj połączenia</a>
+                </li> 
+                <li class="nav-item">
+                    <a class="nav-link" href="/add">Dodaj przystanek</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add_rel">Dodaj połączenie</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/modify">Modyfikuj</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/delete">Usuń przystanek</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/delete_rel">Usuń połączenie</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning" role="alert">{{ message }}</div>
+        {% endfor %}
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+</body>
+
+</html>

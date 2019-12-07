@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>Edytuj przystanek {{p['nazwa']}}</h2>
+    <form action="{{ url_for('modify_one') }}" method="post">
+        <dl>
+            <dt>ulica:</dt>
+            <dd><input type="text" name="ulica" value ="{{p['ulica']}}"></dd>
+            <dt>numer:</dt>
+            <dd><input type="number" name="numer" value="{{p['numer']}}"></dd>
+        </dl>
+        <input type="text" name="nazwa" value="{{p.nazwa}}" style="display: none">
+        <input type="submit" value="Zapisz" class="btn btn-outline-secondary btn-style">
+        
+    </form>
+{% endblock %}

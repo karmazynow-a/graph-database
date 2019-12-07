@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <h2>Usuń połączenie :</h2>
+    <form action="{{ url_for('delete_rel') }}" method="post">
+        <dl>
+            <dt>Przystanek 1:</dt>
+            <dd>
+                <select name="nazwa1" class="custom-select">
+                    {% for row in p1 %}
+                    <option value="{{ row[0]['data']['nazwa'] }}" class="list-group-item">{{ row[0]['data']['nazwa'] }}</option>
+                    {% endfor %}
+                </select>
+            </dd>
+            <dt>Przystanek 2:</dt>
+            <dd>
+                <select name="nazwa2" class="custom-select">
+                    {% for row in p2 %}
+                    <option value="{{ row[0]['data']['nazwa'] }}" class="list-group-item">{{ row[0]['data']['nazwa'] }}</option>
+                    {% endfor %}
+                </select>
+        </dl>
+        <input type="submit" value="Usuń" class="btn btn-outline-secondary btn-style">
+    </form>
+
+{% endblock %}

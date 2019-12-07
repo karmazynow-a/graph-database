@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Najkrótsze połączenie:</h2>
+<p> Zajmie ono {{ czas }} minut.</p>
+
+<table class="table">
+  <thead class="thead-style thead-dark">
+    <tr>
+      <th scope="col" class="thead-style">Przystanek</th>
+      <th scope="col" >Numer autobusu</th>
+      <th scope="col">Czas podróży w minutach</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in output %}
+    <tr>
+      <td>{{row[0] }}</td>
+      <td>{{p[loop.index-1][0] }}</td>
+      <td>{{ row[1] | int}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

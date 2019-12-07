@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Wybierz przystanek:</h2>
+
+<form action="{{ url_for('modify') }}" method="post">
+<div class="input-group">
+    <select name="nazwa" class="custom-select">
+        {% for row in przystanki %}
+        <option value="{{ row[0]['data']['nazwa'] }}" class="list-group-item">{{ row[0]['data']['nazwa'] }}</option>
+        {% endfor %}
+    </select>
+    <div class="input-group-append">
+        <input type="submit" value="Modyfikuj" class="btn btn-outline-secondary btn-style">
+    </div>
+</div>
+</form>
+
+{% endblock %}
