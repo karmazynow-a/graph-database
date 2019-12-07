@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from .models import Przystanek, list_all, get_autobus
 from flask import Flask, request, session, redirect, url_for, render_template, flash
+from urllib.parse import parse_qs, urlparse, urlunparse
 
-try:
-    from urlparse import parse_qs, urlparse, urlunparse
-except ModuleNotFoundError:
-    from urllib.parse import parse_qs, urlparse, urlunparse
 import json
 
 def create_app():
@@ -95,7 +92,7 @@ def search():
                 trasa.append(row)
 
             if not trasa:
-                flash('Ścieżka nie istnieje!')
+                flash('Brak połączenia!')
 
             return redirect(url_for('search_res') + "?trasa=" + json.dumps(trasa))
 
@@ -106,6 +103,9 @@ def search_res():
     parsed = urlparse(request.url)
     o = parse_qs(parsed.query)['trasa'][0]
     output = json.loads(o)
+    if len(output) < 2:
+        return redirect(url_for('search'))
+
     czas = output[-1][1]
 
     przystanki = ['-']

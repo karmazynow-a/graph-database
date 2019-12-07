@@ -1,9 +1,6 @@
 
-#from urllib.parse import urlparse, urlunparse
-try:
-    from urlparse import urlparse, urlunparse
-except ModuleNotFoundError:
-    from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse
+
 import os
 import uuid
 
