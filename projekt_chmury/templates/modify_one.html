@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+
 {% block content %}
   <h2>Edytuj przystanek {{p['nazwa']}}</h2>
     <form action="{{ url_for('modify_one') }}" method="post">

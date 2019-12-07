@@ -7,18 +7,6 @@ except ModuleNotFoundError:
 import os
 import uuid
 
-'''
-from py2neo import Graph, Node, Relationship 
-#py2neo
-graphenedb_url = str(os.environ.get("GRAPHENEDB_BOLT_URL"))
-graphenedb_user = str(os.environ.get("GRAPHENEDB_BOLT_USER"))
-graphenedb_pass = str(os.environ.get("GRAPHENEDB_BOLT_PASSWORD"))
-
-print (graphenedb_url, graphenedb_user, graphenedb_pass)
-
-graph = Graph(graphenedb_url, user=graphenedb_user, password=graphenedb_pass, bolt = True, secure = True, http_port = 24789, https_port = 24780)
-'''
-
 #neo4jrestclient
 from neo4jrestclient.client import GraphDatabase
 
@@ -28,7 +16,6 @@ url_without_auth = urlunparse((url.scheme, "{0}:{1}".format(url.hostname, url.po
 graph = GraphDatabase(url_without_auth, username = url.username, password = url.password)
 
 def execute(query):
-    #return graph.run(query)
     return graph.query(query)
 
 def list_all():

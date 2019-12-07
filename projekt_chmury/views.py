@@ -45,6 +45,8 @@ def add_rel():
 
         if nazwa1 == nazwa2:
             flash('Wybierz dwa różne przystanki!')
+        elif len(autobus) < 0:
+            flash('Podaj numer autobusu')
         elif int(czas) < 1:
             flash('Podaj poprawną wartość czasu!')
         else:
