@@ -72,41 +72,90 @@
 \section{Opis działania aplikacji}
 Celem aplikacji było zademonstrowanie użycia grafowej bazy danych.
 
-Aplikacja udostępnia możliwość wyszukiwania najszybszego połączenia pomiędzy przystankami. Użytkownik ma możliwość dodawania własnych przystanków i relacji między nimi, usuwanie ich, a także modyfikację.
+Aplikacja udostępnia możliwość wyszukiwania najszybszego połączenia pomiędzy przystankami. Użytkownik może dodawanać własne przystanki i relacje między nimi, usuwać je, a także modyfikować.
 
-Na stronie głównej, przestawionej na rysunku \ref{fig:rys1}, przedstawiona jest lista wszystkich dostępnych przystanków w aplikacji.
+Na stronie głównej, przestawionej na rysunku \ref{fig:rys1}, znajduje się lista wszystkich dostępnych przystanków w aplikacji.
 
-\begin{figure}
+\begin{figure}[h]
 \begin{center}
 \includegraphics[width=14cm]{strona.png} 
 \caption{Strona główna aplikacji} \label{fig:rys1}
 \end{center}
 \end{figure}
 
-Przemieszczanie się po stronie odbywa się za pomocą paska nawigacji.
+Przemieszczanie po stronie odbywa się za pomocą paska nawigacji.
 
 \subsection{Dodawanie}
-W aplikacji możemy dodawać zarówno przystanki jak i połączenia. Jeśli chcemy dodać przystanek należy w formularzu podać jego nazwę oraz adres. 
+W aplikacji możemy dodawać zarówno przystanki (w zakładce ''Dodaj przystanek'') jak i połączenia (w zakładce ''Dodaj połączenie''). Jeśli użytkownik chce dodać przystanek w formularzu musi podać jego nazwę oraz adres. 
 
-Aby utworzyć nowe połączenie pomiedzy punktami, należy wybrać dwa odpowiednie przystanki z listy, podać numer autobusu (może być też tramwaju), którym możemy odbyć tą trasę oraz szacowany czas w minutach.
+Aby utworzyć nowe połączenie pomiedzy punktami, należy wybrać dwa odpowiednie przystanki z listy, podać numer autobusu (może być też tramwaju), którym możemy odbyć tą trasę oraz szacowany czas przejazdu w minutach.
 
-Aplikacja jest zabezpieczona przed dodaniem nieprawidłowych danych, takich jak puste wartości, za krótka nazwa ulicy, czy wybór takich samych przystanków.
+Aplikacja jest zabezpieczona przed dodaniem nieprawidłowych danych, takich jak puste wartości, za krótka nazwa ulicy, czy wybór dwoch takich samych przystanków.
 
 \subsection{Modyfikacja}
-W zakładce "Modyfikuj" mamy możliwość zmienienia danych dotyczących przystanku. Po wybraniu nazwy punktu, którego chcemy edytować, zostaje otworzony formularz do zmiany danych.
+W zakładce ''Modyfikuj'' mamy możliwość zmienienia danych dotyczących przystanku. Po wybraniu nazwy punktu, którego chcemy edytować, zostaje otworzony formularz do zmiany danych z aktualnymi wartościami, pobranymi z bazy.
 
 \subsection{Usuwanie}
 Aplikacja udostępnia możliwość usunięcia przystanków razem z wszystkim połączeniami do nich, oraz pojedynczych połączeń. Aby tego dokonać należy wybrać interesujące użytkownika nazwy z listy.
 
 \subsection{Wyszukiwanie}
-W zakładce "Wyszukaj połączenia" użytkowanik może wyszukać najszybszą trasę pomiędzy dwoma przystankami. W rezultacie zostaje wyświetlona tabela z kolejnymi przystankami, numerem autobusu (tramwaju), którym możemy dojechać na dany przystanek, oraz ile czasu podróży już mineło, od jej rozpoczęcia.
+W zakładce ''Wyszukaj połączenia'' użytkownik może wyszukać najszybszą trasę pomiędzy dwoma przystankami.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=14cm]{wyszukiwanie_duze.png} 
+\caption{Przykładowy rezultat wyszukiwania. Aby dojechać z przystanku ''Plac Inwalidów'' do ''Miasteczko Studenckie'' należy pojechać autobusem (tramwajem) numer 4 przez przystanek ''Urzędnicza'' do przystanku ''Biprostal''. Zajmie to 5 minut. Następnie należy przesiąść się na autobus numer 194 i dojechać nim na ''Kawiory''. Ostatnim etapem trasy będzie podróż autobusem 208 do przystanku docelowego. Cała podróż zajmie 17 minut.} \label{fig:rys2}
+\end{center}
+\end{figure}
+
+ Jako rezultat zostaje wyświetlona tabela z kolejnymi przystankami, numerem autobusu (tramwaju), którym możemy dojechać na dany przystanek, oraz ile czasu podróży już mineło, od jej rozpoczęcia. Przykładowa tabela przedstawiona została na rysunku \ref{fig:rys2}.
+
+\section{Budowa aplikacji}
+Projekt składa się z \verb\models.py\, który zawiera model przystanku, komunikujący się z bazą danych, \verb\views.py\ generujący widoki aplikacji oraz \verb\templates\ z szablonami widoków.
+
+\subsection{Modele}
+Aplikacja zawiera jeden model danych - model przystanku, który reprezentuje węzeł w bazie. Identyfikowany jest on za pomocą nazwy. Aby wykonać operacje na węzłach wysyłane są zapytania języka Cypher, na przykład:
+\begin{itemize}
+\item dodawanie przystanku 
+	\\ \verb\CREATE (p:Przystanek {nazwa:'Kawiory', ulica: 'Nawojki',\
+	\\ \verb\	 numer:'1'})\
+\item modyfikacja danych przystanku 
+	\\ \verb\MATCH (p:Przystanek {nazwa: 'Kawiory'}) SET n.ulica = \
+	\\ \verb\'Nawojki', n.numer = '2' RETURN n\
+\item usuwanie przystanku 
+	\\ \verb\MATCH (p:Przystanek {nazwa: 'Kawiory'}) DETACH DELETE p\
+\end{itemize}
+
+Model przystanku operuje też na połączeniach między węzłami, na przykład:
+\begin{itemize}
+\item dodawanie relacji 
+	\\ \verb\ MATCH (p1:Przystanek{nazwa: 'AGH'}), (p2:Przystanek {nazwa:\ 
+	\\ \verb\ 		'Kawiory'}) CREATE (p1) - [r:POLACZONY{ numer: '194',\ 
+	\\ \verb\ 		czas: 3}]->(p2) RETURN r\ 
+\item usuwanie relacji 
+	\\ \verb\ MATCH (p1:Przystanek{nazwa: 'AGH'})-[r:POLACZONY]-\ 
+	\\ \verb\ 		(p2:Przystanek {nazwa:'Kawiory'}) DELETE r\ 
+\item sprawdzanie, czy relacja istnieje 
+	\\ \verb\ MATCH (s:Przystanek{nazwa: 'AGH'}), (e:Przystanek {nazwa:\ 
+	\\ \verb\ 		'Kawiory'}) RETURN EXISTS ((s)-[:POLACZONY]-(e))\ 
+\end{itemize}
+
+Wyszukiwanie najkrótszej ścieżki odbywa się za pomocą zapytania wykorzystującego algorytm Neo4j \verb\algo.shortestPath\:
+\\
+\\ \verb\MATCH (s:Przystanek {nazwa:'AGH'}), (e:Przystanek {nazwa:'Kawiory'})  \
+\\ \verb\	 CALL algo.shortestPath.stream(start, end, 'czas')  \
+\\ \verb\	 YIELD nodeId, cost \
+\\	\verb\	 RETURN algo.asNode(nodeId).nazwa AS name, cost \
+
+\subsection{Widoki}
+W tym pliku znajdują się funkcje odpowiadające na żądania przekazywane przez obiekt HttpRequest. Widoki generują odpowiednie szablony. Formularze przekazywane są do widoków na pomocą żądania typu POST. Są one najpierw walidowane, a następnie wywoływana jest odpowiednia funkcja modelu. Gdy model zwróci odpowiedź, widok musi odpowiednio na nią zareagować - sprawdzić, czy operacja powiodła się i przeparsować wynik, aby można było go umieścić w szablonie.
 
 \section{Typy danych}
 
 \section{Wykorzystane technologie}
-Aplikacja została zrealizowana za pomocą mikrofameworka Flask w Pythonie 3. Dostęp do bazy danych jest realizowany przez bibliotekę neo4jrestclient, wysyłająca zapytania do serwera REST bazy Neo4j. Połączenie jest realizowane przez HTTP REST. Zapytania do bazy danych zostały napisane w języku zaptań Cypher. Baza danych jest dostarczana przez graphenedb, jest to baza Neo4j w chmurze, hostowana na Heroku.
+Aplikacja została zrealizowana za pomocą mikroframeworka Flask w języku Python 3. Dostęp do bazy danych jest realizowany przez bibliotekę neo4jrest- client, wysyłająca zapytania do serwera REST bazy Neo4j. Połączenie jest realizowane przez HTTP REST. Baza danych jest dostarczana przez graphenedb, która jest bazą Neo4j w chmurze, hostowana na Heroku.
 
-Do oprawy graficznej strony został użyty framwork Bootstrap4.
+Do oprawy graficznej strony został użyty framwork Bootstrap4. Szablony widoków uzupełniane są za pomocą Jinja.
 
 Aplikacja znajduje się w środowisku chmurowym Heroku pod adresem:
 \url{https://mighty-mountain-55683.herokuapp.com/}.
