@@ -1,6 +1,6 @@
 # POC for graph database
 
-Uni project made with Python3 + Flask + Graphenedb deployed on heroku.
+Uni project made with Python + Flask + Graphenedb deployed on heroku.
 
 For database connection: neo4jrestclient
 
