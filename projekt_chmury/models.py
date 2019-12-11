@@ -94,7 +94,7 @@ class Przystanek:
     def delete_rel(self, nazwa2):
         p1 = self.find()
         p2 = Przystanek(nazwa2).find()
-        query_exists="MATCH (start:Przystanek{nazwa: '" + self.nazwa + "'}), "
+        query_exists = "MATCH (start:Przystanek{nazwa: '" + self.nazwa + "'}), "
         query_exists+= "(end:Przystanek {nazwa: '" + nazwa2 + "'}) "
         query_exists+= "RETURN EXISTS ((start)-[:POLACZONY]-(end))"
 
