@@ -88,17 +88,17 @@ Przemieszczanie po stronie odbywa się za pomocą paska nawigacji.
 \subsection{Dodawanie}
 W aplikacji możemy dodawać zarówno przystanki (w zakładce ''Dodaj przystanek'') jak i połączenia (w zakładce ''Dodaj połączenie''). Odpowiednie informacje należy podać w formularzu, a następnie potwierdzić przyciskiem ''Dodaj''.
 
-Jeśli użytkownik chce dodać przystanek w formularzu musi podać jego nazwę oraz adres. 
+Jeśli użytkownik chce dodać przystanek musi podać w formularzu jego nazwę oraz adres. 
 
 Aby utworzyć nowe połączenie pomiedzy punktami, należy wybrać dwa odpowiednie przystanki z listy, podać numer autobusu (może być też tramwaju), którym możemy odbyć tą trasę oraz szacowany czas przejazdu w minutach.
 
 Aplikacja jest zabezpieczona przed dodaniem nieprawidłowych danych, takich jak puste wartości, za krótka nazwa ulicy, czy wybór dwóch takich samych przystanków.
 
 \subsection{Modyfikacja}
-W zakładce ''Modyfikuj'' mamy możliwość zmienienia danych dotyczących przystanku. Po wybraniu nazwy punktu, którego chcemy edytować, zostaje otworzony formularz do zmiany danych z aktualnymi wartościami, pobranymi z bazy.
+W zakładce ''Modyfikuj'' mamy możliwość zmieniania danych dotyczących przystanku. Po wybraniu nazwy punktu, którego chcemy edytować, zostaje otworzony formularz do zmiany danych z aktualnymi wartościami, pobranymi z bazy.
 
 \subsection{Usuwanie}
-Aplikacja udostępnia możliwość usunięcia przystanków razem z wszystkim połączeniami do nich, oraz pojedynczych połączeń. Aby tego dokonać należy wybrać interesujące użytkownika nazwy z listy.
+Aplikacja udostępnia możliwość usunięcia przystanku razem z wszystkim połączeniami do niego, oraz pojedynczych połączeń. Aby tego dokonać należy wybrać odpowiednią nazwę z listy.
 
 \subsection{Wyszukiwanie}
 W zakładce ''Wyszukaj połączenia'' użytkownik może wyszukać najszybszą trasę pomiędzy dwoma przystankami.
@@ -110,13 +110,13 @@ W zakładce ''Wyszukaj połączenia'' użytkownik może wyszukać najszybszą tr
 \end{center}
 \end{figure}
 
- Jako rezultat zostaje wyświetlona tabela z kolejnymi przystankami, numerem autobusu (tramwaju), którym możemy dojechać na dany przystanek, oraz ile czasu podróży już mineło, od jej rozpoczęcia. Przykładowa tabela przedstawiona została na rysunku \ref{fig:rys2}.
+ Jako rezultat zostaje wyświetlona tabela z kolejnymi przystankami, numerem autobusu (tramwaju), którym możemy dojechać na dany przystanek, oraz ile minut już mineło od rozpoczęcia podróży. Przykładowa tabela przedstawiona została na rysunku \ref{fig:rys2}.
 
 \section{Budowa aplikacji}
 Projekt składa się z \verb\models.py\, który zawiera model przystanku, komunikujący się z bazą danych, \verb\views.py\ generujący widoki aplikacji oraz \verb\templates\ z szablonami widoków.
 
-\subsection{Modele}
-Aplikacja zawiera jeden model danych - model przystanku, który reprezentuje węzeł w bazie. Identyfikowany jest on za pomocą nazwy. Aby wykonać operacje na węzłach wysyłane są zapytania języka Cypher, generowane na podstawie danych przesłanych od widoku z formaularzy. Przykładowe zapytania:
+\subsection{Model}
+Aplikacja zawiera jeden model danych - model przystanku, który jest reprezentowany przez węzeł w bazie. Identyfikowany jest on za pomocą nazwy (oprócz standardowego id, nadawanego przez bazę Neo4j). Operacje na węzłach są wykonywane przez zapytania języka Cypher, generowane na podstawie danych przesłanych od widoku z formaularzy. Przykładowe zapytania:
 \begin{itemize}
 \item dodawanie przystanku 
 	\\ \verb\CREATE (p:Przystanek {nazwa:'Kawiory', ulica: 'Nawojki',\
@@ -132,7 +132,7 @@ Model przystanku operuje też na połączeniach między węzłami, na przykład:
 \begin{itemize}
 \item dodawanie relacji 
 	\\ \verb\ MATCH (p1:Przystanek{nazwa: 'AGH'}), (p2:Przystanek {nazwa:\ 
-	\\ \verb\ 		'Kawiory'}) CREATE (p1) - [r:POLACZONY{ numer: '194',\ 
+	\\ \verb\ 		'Kawiory'}) CREATE (p1)-[r:POLACZONY{ numer: '194',\ 
 	\\ \verb\ 		czas: 3}]->(p2) RETURN r\ 
 \item usuwanie relacji 
 	\\ \verb\ MATCH (p1:Przystanek{nazwa: 'AGH'})-[r:POLACZONY]-\ 
@@ -150,10 +150,10 @@ Wyszukiwanie najkrótszej ścieżki odbywa się za pomocą zapytania wykorzystuj
 \\	\verb\	 RETURN algo.asNode(nodeId).nazwa AS name, cost \
 
 \subsection{Widoki}
-W pliku \verb\views.py\ znajdują się funkcje odpowiadające na żądania przekazywane przez obiekt HttpRequest. Widoki generują odpowiednie szablony. Formularze przekazywane są do widoków na pomocą żądania typu POST. Są one najpierw walidowane, a następnie wywoływana jest odpowiednia funkcja modelu. Gdy model zwróci odpowiedź, widok musi odpowiednio na nią zareagować - sprawdzić, czy operacja powiodła się i przeparsować wynik, aby można było go umieścić w szablonie.
+W pliku \verb\views.py\ znajdują się funkcje odpowiadające na żądania przekazywane przez obiekt HttpRequest. Widoki generują odpowiednie szablony. Formularze przekazywane są do widoków za pomocą żądania typu POST. Są one najpierw walidowane, a następnie wywoływana jest odpowiednia funkcja modelu. Gdy model zwróci odpowiedź, widok musi odpowiednio na nią zareagować - sprawdzić, czy operacja powiodła się i przeparsować wynik, aby można było go umieścić w szablonie.
 
 \section{Typy danych}
-Przystanek w bazie danych jest opisywany poprzez węzeł zawierający trzy atrybuty: nazwę przystanku oraz adres: ulicę i numer. Wszystkie z nich przechowywane są jako łańcuch znaków. Oprócz atrybutów Neo4j dodaje do węzłów indentyfikator.
+Przystanek w bazie danych jest opisywany poprzez węzeł zawierający trzy atrybuty: nazwę przystanku oraz adres: ulicę i numer. Wszystkie z nich przechowywane są jako łańcuch znaków. Oprócz atrybutów Neo4j dodaje do węzłów identyfikator.
 
 Przystanki mogą być ze sobą połączone relacją o etykiecie ''POLACZONY''. Zawiera ona dwa artybuty - czas przejazdu podany w minutach oraz numer autobusu (lub tramwaju), którym możemy pokonać daną trasę. Czas przechowywany jest jako liczba całkowita, numer autobusu jako łańcuch znaków (czasem pojawiają się litery przy numerach autobusów, aby określić jego specjalny typ, np. nocny)
 
@@ -167,7 +167,7 @@ Przystanki mogą być ze sobą połączone relacją o etykiecie ''POLACZONY''. Z
 
 
 \section{Wykorzystane technologie}
-Aplikacja została zrealizowana za pomocą mikroframeworka Flask w języku Python 3. Dostęp do bazy danych jest realizowany przez bibliotekę neo4jrest- client, wysyłającą zapytania do serwera REST bazy Neo4j. Połączenie jest realizowane przez HTTP REST. Baza danych jest dostarczana przez graphenedb, która jest bazą Neo4j w chmurze, hostowana na Heroku.
+Aplikacja została zrealizowana za pomocą mikroframeworka Flask w języku Python. Dostęp do bazy danych jest realizowany przez bibliotekę neo4jrest- client, wysyłającą zapytania do serwera REST bazy Neo4j. Połączenie jest realizowane przez HTTP REST. Baza danych jest dostarczana przez graphenedb, która jest bazą Neo4j w chmurze, która jest hostowana na Heroku.
 
 Do oprawy graficznej strony został użyty framwork Bootstrap4. Szablony widoków uzupełniane są za pomocą Jinja.
 
