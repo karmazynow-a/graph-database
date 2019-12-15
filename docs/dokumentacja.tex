@@ -72,7 +72,7 @@
 \section{Opis działania aplikacji}
 Celem aplikacji było zademonstrowanie użycia grafowej bazy danych.
 
-Aplikacja udostępnia możliwość wyszukiwania najszybszego połączenia pomiędzy przystankami. Użytkownik może dodawanać własne przystanki i relacje między nimi, usuwać je, a także modyfikować.
+Aplikacja udostępnia możliwość wyszukiwania najszybszego połączenia pomiędzy przystankami. Użytkownik może dodawać własne przystanki i relacje między nimi, usuwać je, a także modyfikować.
 
 Na stronie głównej, przestawionej na rysunku \ref{fig:rys1}, znajduje się lista wszystkich dostępnych przystanków w aplikacji.
 
@@ -86,7 +86,7 @@ Na stronie głównej, przestawionej na rysunku \ref{fig:rys1}, znajduje się lis
 Przemieszczanie po stronie odbywa się za pomocą paska nawigacji.
 
 \subsection{Dodawanie}
-W aplikacji możemy dodawać zarówno przystanki (w zakładce ''Dodaj przystanek'') jak i połączenia (w zakładce ''Dodaj połączenie''). Odpowiednie informacje należy podać w formularzu, a następnie potwierdzić przyciskiem ''Dodaj''.
+W aplikacji możemy dodawać zarówno przystanki (w zakładce ''Dodaj przystanek'') jak i połączenia (w zakładce ''Dodaj połączenie''). Należy podać wymagane informacje w formularzu, a następnie potwierdzić przyciskiem ''Dodaj''.
 
 Jeśli użytkownik chce dodać przystanek musi podać w formularzu jego nazwę oraz adres. 
 
@@ -116,7 +116,7 @@ W zakładce ''Wyszukaj połączenia'' użytkownik może wyszukać najszybszą tr
 Projekt składa się z \verb\models.py\, który zawiera model przystanku, komunikujący się z bazą danych, \verb\views.py\ generujący widoki aplikacji oraz \verb\templates\ z szablonami widoków.
 
 \subsection{Model}
-Aplikacja zawiera jeden model danych - model przystanku, który jest reprezentowany przez węzeł w bazie. Identyfikowany jest on za pomocą nazwy (oprócz standardowego id, nadawanego przez bazę Neo4j). Operacje na węzłach są wykonywane przez zapytania języka Cypher, generowane na podstawie danych przesłanych od widoku z formaularzy. Przykładowe zapytania:
+Aplikacja zawiera jeden model danych - model przystanku, który jest reprezentowany przez węzeł w bazie. Identyfikowany jest on za pomocą nazwy (oprócz standardowego identyfikatora, nadawanego przez bazę Neo4j). Operacje na węzłach są wykonywane przez zapytania języka Cypher, generowane na podstawie danych przesłanych od widoku z formaularzy. Przykładowe zapytania:
 \begin{itemize}
 \item dodawanie przystanku 
 	\\ \verb\CREATE (p:Przystanek {nazwa:'Kawiory', ulica: 'Nawojki',\
@@ -167,7 +167,7 @@ Przystanki mogą być ze sobą połączone relacją o etykiecie ''POLACZONY''. Z
 
 
 \section{Wykorzystane technologie}
-Aplikacja została zrealizowana za pomocą mikroframeworka Flask w języku Python. Dostęp do bazy danych jest realizowany przez bibliotekę neo4jrest- client, wysyłającą zapytania do serwera REST bazy Neo4j. Połączenie jest realizowane przez HTTP REST. Baza danych jest dostarczana przez graphenedb, która jest bazą Neo4j w chmurze, która jest hostowana na Heroku.
+Aplikacja została zrealizowana za pomocą mikroframeworka Flask w języku Python. Dostęp do bazy danych jest realizowany przez bibliotekę neo4jrest- client, wysyłającą zapytania do serwera REST bazy Neo4j. Połączenie jest realizowane przez HTTP REST. Baza danych jest dostarczana przez graphenedb, która jest bazą Neo4j w chmurze. Jest ona hostowana na Heroku.
 
 Do oprawy graficznej strony został użyty framwork Bootstrap4. Szablony widoków uzupełniane są za pomocą Jinja.
 
